@@ -4,12 +4,11 @@ interface StatsCardProps {
   title: string;
   value: string;
   icon: LucideIcon;
-  change: string;
+  change?: string;
+  description?: string;
 }
 
-export function StatsCard({ title, value, icon: Icon, change }: StatsCardProps) {
-  const isPositive = change.startsWith("+");
-
+export function StatsCard({ title, value, icon: Icon, change, description }: StatsCardProps) {
   return (
     <div className="rounded-xl border bg-background p-6 shadow-sm">
       <div className="flex items-center justify-between">
@@ -18,9 +17,18 @@ export function StatsCard({ title, value, icon: Icon, change }: StatsCardProps) 
       </div>
       <div className="mt-2">
         <p className="text-2xl font-bold">{value}</p>
-        <p className={`text-xs mt-1 ${isPositive ? "text-green-600" : "text-red-600"}`}>
-          {change} from last month
-        </p>
+        {change && (
+          <p
+            className={`text-xs mt-1 ${
+              change.startsWith("+") ? "text-green-600" : "text-red-600"
+            }`}
+          >
+            {change} from last month
+          </p>
+        )}
+        {description && !change && (
+          <p className="text-xs mt-1 text-muted-foreground">{description}</p>
+        )}
       </div>
     </div>
   );

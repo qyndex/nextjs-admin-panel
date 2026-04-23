@@ -8,7 +8,6 @@ describe("StatsCard", () => {
     title: "Total Users",
     value: "2,420",
     icon: Users,
-    change: "+12%",
   };
 
   it("renders the title and value", () => {
@@ -18,7 +17,7 @@ describe("StatsCard", () => {
   });
 
   it("renders change text with 'from last month' suffix", () => {
-    render(<StatsCard {...baseProps} />);
+    render(<StatsCard {...baseProps} change="+12%" />);
     expect(screen.getByText("+12% from last month")).toBeInTheDocument();
   });
 
@@ -32,6 +31,19 @@ describe("StatsCard", () => {
     render(<StatsCard {...baseProps} change="-5%" />);
     const changeEl = screen.getByText("-5% from last month");
     expect(changeEl).toHaveClass("text-red-600");
+  });
+
+  it("renders description when no change is provided", () => {
+    render(<StatsCard {...baseProps} description="All registered users" />);
+    expect(screen.getByText("All registered users")).toBeInTheDocument();
+  });
+
+  it("prefers change over description", () => {
+    render(
+      <StatsCard {...baseProps} change="+5%" description="All users" />
+    );
+    expect(screen.getByText("+5% from last month")).toBeInTheDocument();
+    expect(screen.queryByText("All users")).not.toBeInTheDocument();
   });
 
   it("renders the Lucide icon element", () => {
